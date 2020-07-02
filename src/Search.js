@@ -14,6 +14,16 @@ class Search extends React.Component {
       "http://images.pushsquare.com/2447800160774/god-of-war-iii-remastered-ps4-playstation-4-1.original.jpg",
       "https://i.ytimg.com/vi/9EvP4NWW0T0/maxresdefault.jpg"
     ];
+
+    this.state = {
+      choose: Array(this.imageSources.length).fill(-1)
+    }
+  }
+
+  imageOnClick(index, value) {
+    let tempChoose = this.state.choose.slice();
+    tempChoose[index] = value;
+    this.setState({ choose: tempChoose })
   }
     
   render() {
@@ -24,14 +34,24 @@ class Search extends React.Component {
         <h3>{this.value}</h3>
 
         {
-          this.imageSources.map((image) => (
+          this.imageSources.map((image, index) => (
             <div>
+              <h2>{this.state.choose[index]}</h2>
+
               <img
                 width="100"
                 height="100"
                 src={image}
                 alt=""
               />
+
+              <button onClick={() => this.imageOnClick(index, 1)}>
+                Yes
+              </button>
+
+              <button onClick={() => this.imageOnClick(index, 0)}>
+                No
+              </button>
 
               <br />
               <br />
