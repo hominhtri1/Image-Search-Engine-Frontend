@@ -4,6 +4,7 @@ import {
   Stage,
   Layer
 } from 'react-konva';
+import "./Sketch.css"
 
 class Sketch extends React.Component {
   constructor(props) {
@@ -14,7 +15,15 @@ class Sketch extends React.Component {
     this.stageEl = React.createRef();
     this.layerEl = React.createRef();
 
+    this.width = 1340;
+    this.height = 300;
+
     this.ink = [[], [], []];
+
+    this.state = {
+      showInk: false,
+      debugData: ""
+    }
   }
 
   componentDidMount() {
@@ -79,35 +88,89 @@ class Sketch extends React.Component {
   }
 
   updateInk(x, y, time) {
-    this.ink[0].push(x);
-    this.ink[1].push(y);
-    this.ink[2].push(time);
+    this.ink[0].push(Math.floor(x));
+    this.ink[1].push(Math.floor(y));
+    this.ink[2].push(Math.floor(time));
   }
 
   searchOnClick() {
+    let requestBody = new URLSearchParams();
+
+    requestBody.append("width", this.width);
+    requestBody.append("height", this.height);
+    requestBody.append("limit_size", 10);
+
+    requestBody.append("a", "[" + this.ink[0].toString() + "]");
+    requestBody.append("b", "[" + this.ink[1].toString() + "]");
+    requestBody.append("c", "[" + this.ink[2].toString() + "]");
+
+    fetch("http://a3f2f7491daa.ngrok.io/api/sketch_search/search/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: requestBody
+    }).then((response) => response.json())
+      .then(
+        (data) => this.parseRequestData(data),
+        (error) => console.log(error)
+      );
+  }
+
+  parseRequestData(data) {
+    let imageList = data.results.list_img;
+
     this.history.push({
       pathname: "/search",
       state: {
-        type: "sketch",
-        value: this.ink[0].length
+        type: "text",
+        value: this.ink[0].length,
+        curImages: imageList
       }
     })
   }
 	
   render() {
 	  return (
-      <div>
-        <h2>Sketch</h2>
+      <div className="sketch-div">
+        <h2 className="sketch-header">Sketch Search</h2>
 
-        <Stage width="1000" height="300" ref={this.stageEl}>
+        <h6 className="sketch-instruction">
+          Sketch what you want to search for:
+        </h6>
+
+        <Stage
+          className="sketch-border"
+          width={this.width}
+          height={this.height}
+          ref={this.stageEl}
+        >
           <Layer ref={this.layerEl} />
         </Stage>
 
         <br />
 
-        <button onClick={() => this.searchOnClick()}>
+        <button className="sketch-button" onClick={() => this.searchOnClick()}>
           Search
         </button>
+
+        {
+          this.state.showInk && (
+            <div>
+              <h1>{this.ink[0].toString()}</h1>
+
+              <br />
+
+              <h1>{this.ink[1].toString()}</h1>
+
+              <br />
+
+              <h1>{this.ink[2].toString()}</h1>
+            </div>
+          )
+        }
+
+        <h1>{this.state.debugData}</h1>
       </div>
     );
   }

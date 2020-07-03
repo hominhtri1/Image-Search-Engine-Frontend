@@ -1,4 +1,5 @@
 import React from 'react';
+import "./Search.css"
 
 class Search extends React.Component {
   constructor(props) {
@@ -8,15 +9,18 @@ class Search extends React.Component {
     this.location = this.props.location;
 
     this.value = this.location.state.value;
+    this.curImages = this.location.state.curImages;
 
-    this.imageSources = [
-      "https://i.ytimg.com/vi/bH5ptvpS1ic/maxresdefault.jpg",
-      "http://images.pushsquare.com/2447800160774/god-of-war-iii-remastered-ps4-playstation-4-1.original.jpg",
-      "https://i.ytimg.com/vi/9EvP4NWW0T0/maxresdefault.jpg"
-    ];
-
+    if (typeof this.curImages === "undefined") {
+      this.curImages = [
+        {coco_url: "https://i.ytimg.com/vi/bH5ptvpS1ic/maxresdefault.jpg"},
+        {coco_url: "http://images.pushsquare.com/2447800160774/god-of-war-iii-remastered-ps4-playstation-4-1.original.jpg"},
+        {coco_url: "https://i.ytimg.com/vi/9EvP4NWW0T0/maxresdefault.jpg"}
+      ];
+    }
+    
     this.state = {
-      choose: Array(this.imageSources.length).fill(-1)
+      choose: Array(this.curImages.length).fill(-1)
     }
   }
 
@@ -25,33 +29,30 @@ class Search extends React.Component {
     tempChoose[index] = value;
     this.setState({ choose: tempChoose })
   }
+
+  homeOnClick() {
+    this.history.push({
+      pathname: "/",
+      state: {
+        curImages: this.curImages
+      }
+    })
+  }
     
   render() {
     return (
-      <div>
-        <h2>Search</h2>
-
-        <h3>{this.value}</h3>
+      <div className="search-div">
+        <h1 className="search-header">Search Results</h1>
 
         {
-          this.imageSources.map((image, index) => (
-            <div>
-              <h2>{this.state.choose[index]}</h2>
-
+          this.curImages.map((image, index) => (
+            <div key={index}>
               <img
-                width="100"
-                height="100"
-                src={image}
+                width="300"
+                height="300"
+                src={image.coco_url}
                 alt=""
               />
-
-              <button onClick={() => this.imageOnClick(index, 1)}>
-                Yes
-              </button>
-
-              <button onClick={() => this.imageOnClick(index, 0)}>
-                No
-              </button>
 
               <br />
               <br />
@@ -59,7 +60,7 @@ class Search extends React.Component {
           ))
         }
     
-        <button onClick={() => this.history.push("/")}>
+        <button className="search-button" onClick={() => this.homeOnClick()}>
           Home
         </button>
       </div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import "./Image.css";
 
 class Image extends React.Component {
   constructor(props) {
@@ -9,6 +10,7 @@ class Image extends React.Component {
     this.value = "";
 
     this.state = {
+      value: "",
       image: ""
     };
   }
@@ -28,35 +30,70 @@ class Image extends React.Component {
   }
   
   searchOnClick() {
+    let requestBody = new URLSearchParams();
+
+    requestBody.append("image_url", this.state.image);
+    requestBody.append("limit_size", 10);
+
+    fetch("http://adfd5068141b.ngrok.io/api/image_search/search/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: requestBody
+    }).then((response) => response.json())
+      .then(
+        (data) => this.parseRequestData(data),
+        (error) => console.log(error)
+      );
+  }
+
+  parseRequestData(data) {
+    let imageList = data.results.list_img;
+
     this.history.push({
       pathname: "/search",
       state: {
         type: "image",
-        value: this.value,
+        value: this.state.value,
+        curImages: imageList
       }
     })
   }
 	
   render() {
 	  return (
-      <div>
-        <h2>Image</h2>
-      
+      <div className="image-div">
+        <h1 className="image-header">Image Search</h1>
+
+        <h6 className="image-instruction">
+          Enter the url of the image you want to search for:
+        </h6>
+
         <input
-          type="file"
-          accept="image/*"
-          onChange={(event) => this.imageOnChange(event)}
+          className="image-input"
+          type="text"
+          value={this.state.value}
+          onChange={(event) => this.setState({value: event.target.value})}
         />
-  
-        <br />
-        <br />
+
+        <button
+          className="image-button"
+          onClick={() => this.setState({ image: this.state.value })}
+        >
+          Show
+        </button>
+
+        <h6 className="image-instruction">
+          Click "Show" to show the image at the entered url
+        </h6>
 
         {
           this.state.image !== "" && (
             <div>
               <img
-                width="100"
-                height="100"
+                width="300"
+                height="300"
                 src={this.state.image}
                 alt=""
               />
@@ -67,7 +104,7 @@ class Image extends React.Component {
           )
         }
       
-        <button onClick={() => this.searchOnClick()}>
+        <button className="image-button" onClick={() => this.searchOnClick()}>
           Search
         </button>
       </div>
