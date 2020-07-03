@@ -12,7 +12,8 @@ class Text extends React.Component {
     this.curImages = this.location.state.curImages;
 
     this.state = {
-      value: ""
+      value: "",
+      debugData: ""
     };
   }
   
@@ -21,7 +22,7 @@ class Text extends React.Component {
 
     if (!this.refine) {
       requestBody.append("type_request", "search");
-      requestBody.append("limit_size", 10);
+      requestBody.append("limit_size", 100);
       requestBody.append("text", this.state.value);
     } else {
       requestBody.append("type_request", "refine");
@@ -30,10 +31,10 @@ class Text extends React.Component {
 
       let curImageIds = this.curImages.map((image) => image.id);
 
-      requestBody.append("list_imgIds", curImageIds);
+      requestBody.append("list_imgIds", "[" + curImageIds.join(", ") + "]");
     }
 
-    fetch("http://a591a6186014.ngrok.io/api/text_search/search/", {
+    fetch("https://a591a6186014.ngrok.io/api/text_search/search/", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded"
@@ -88,6 +89,8 @@ class Text extends React.Component {
         <button className="text-button" onClick={() => this.searchOnClick()}>
           Search
         </button>
+
+        <h1>{this.state.debugData}</h1>
       </div>
     );
   }

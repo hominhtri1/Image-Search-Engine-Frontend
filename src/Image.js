@@ -32,10 +32,16 @@ class Image extends React.Component {
   searchOnClick() {
     let requestBody = new URLSearchParams();
 
-    requestBody.append("image_url", this.state.image);
-    requestBody.append("limit_size", 10);
+    let imageUrl = this.state.image;
 
-    fetch("http://adfd5068141b.ngrok.io/api/image_search/search/", {
+    if (imageUrl === "") {
+      imageUrl = this.state.value;
+    }
+
+    requestBody.append("image_url", imageUrl);
+    requestBody.append("limit_size", 100);
+
+    fetch("https://adfd5068141b.ngrok.io/api/image_search/search/", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded"

@@ -45,7 +45,7 @@ class Search extends React.Component {
         <h1 className="search-header">Search Results</h1>
 
         {
-          this.curImages.map((image, index) => (
+          this.curImages.slice(0, 10).map((image, index) => (
             <div key={index}>
               <img
                 width="300"

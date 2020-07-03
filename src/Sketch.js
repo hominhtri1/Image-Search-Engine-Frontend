@@ -98,13 +98,13 @@ class Sketch extends React.Component {
 
     requestBody.append("width", this.width);
     requestBody.append("height", this.height);
-    requestBody.append("limit_size", 10);
+    requestBody.append("limit_size", 100);
 
     requestBody.append("a", "[" + this.ink[0].toString() + "]");
     requestBody.append("b", "[" + this.ink[1].toString() + "]");
     requestBody.append("c", "[" + this.ink[2].toString() + "]");
 
-    fetch("http://a3f2f7491daa.ngrok.io/api/sketch_search/search/", {
+    fetch("https://a3f2f7491daa.ngrok.io/api/sketch_search/search/", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded"
