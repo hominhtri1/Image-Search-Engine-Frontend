@@ -34,7 +34,7 @@ class Text extends React.Component {
       requestBody.append("list_imgIds", "[" + curImageIds.join(", ") + "]");
     }
 
-    fetch("https://a591a6186014.ngrok.io/api/text_search/search/", {
+    fetch("https://9cad890d9904.ngrok.io/api/text_search/search/", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded"

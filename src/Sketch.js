@@ -104,7 +104,7 @@ class Sketch extends React.Component {
     requestBody.append("b", "[" + this.ink[1].toString() + "]");
     requestBody.append("c", "[" + this.ink[2].toString() + "]");
 
-    fetch("https://a3f2f7491daa.ngrok.io/api/sketch_search/search/", {
+    fetch("https://e04e9e53a1d2.ngrok.io/api/sketch_search/search/", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded"

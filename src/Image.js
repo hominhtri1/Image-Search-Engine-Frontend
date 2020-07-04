@@ -41,7 +41,7 @@ class Image extends React.Component {
     requestBody.append("image_url", imageUrl);
     requestBody.append("limit_size", 100);
 
-    fetch("https://adfd5068141b.ngrok.io/api/image_search/search/", {
+    fetch("https://ec35e7629360.ngrok.io/api/image_search/search/", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded"
